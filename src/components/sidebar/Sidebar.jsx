@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SidebarHeader from "./header/SidebarHeader";
+import { SidebarHeader } from "./header";
 import { Notifications } from "./notifications";
 import { Search, SearchResults } from "./search";
 import { Conversations } from "./conversations";
