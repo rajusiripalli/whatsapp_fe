@@ -2,7 +2,6 @@ import React from "react";
 import { dateHandler } from "../../../utils/date";
 
 export default function Conversation({ convo }) {
-  console.log("convo -->", convo);
   return (
     <li
       //onClick={() => openConversation()}
