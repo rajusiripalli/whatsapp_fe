@@ -1,10 +1,25 @@
 import React from "react";
 import { dateHandler } from "../../../utils/date";
+import { useDispatch, useSelector } from "react-redux";
+import { open_create_conversation } from "../../../features/chatSlice";
+import { getConversationId } from "../../../utils/chat";
 
 export default function Conversation({ convo }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { token } = user;
+
+  const values = {
+    receiver_id: getConversationId(user, convo.users),
+    token,
+  };
+
+  const openConversation = () => {
+    dispatch(open_create_conversation(values));
+  };
   return (
     <li
-      //onClick={() => openConversation()}
+      onClick={() => openConversation()}
       className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:"dark:bg-dark_bg_2  cursor-pointer dark:text-dark_text_1 px-[10px]`}
     >
       {/*Container */}
@@ -31,7 +46,11 @@ export default function Conversation({ convo }) {
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1 dark:text-dark_text_2">
-                  <p>{convo.latestMessage.message}</p>
+                  <p>
+                    {convo.latestMessage?.message.length > 25
+                      ? `${convo.latestMessage?.message.substring(0, 25)}...`
+                      : convo.latestMessage?.message}
+                  </p>
                 </div>
               </div>
             </div>
