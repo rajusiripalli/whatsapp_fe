@@ -8,13 +8,13 @@ export default function Conversation({ convo }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { token } = user;
-
   const values = {
     receiver_id: getConversationId(user, convo.users),
     token,
   };
 
   const openConversation = () => {
+    console.log("values convo checkkk -->", values);
     dispatch(open_create_conversation(values));
   };
   return (
