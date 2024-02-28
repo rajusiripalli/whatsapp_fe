@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Input({ message, setMessage }) {
+export default function Input({ message, setMessage, textRef }) {
   const onChangeHandler = (e) => {
     setMessage(e.target.value);
   };
@@ -13,7 +13,7 @@ export default function Input({ message, setMessage }) {
         placeholder="Type a message"
         value={message}
         onChange={onChangeHandler}
-        // ref={textRef}
+        ref={textRef}
       />
     </div>
   );

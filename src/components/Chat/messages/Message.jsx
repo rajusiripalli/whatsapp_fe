@@ -2,6 +2,7 @@ import moment from "moment";
 import TraingleIcon from "../../../svg/triangle";
 
 export default function Message({ message, me }) {
+  console.log("message & me -->", message, me);
   return (
     <div
       className={`w-full flex mt-2 space-x-3 max-w-xs ${
