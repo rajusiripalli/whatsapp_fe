@@ -4,7 +4,7 @@ import { Notifications } from "./notifications";
 import { Search, SearchResults } from "./search";
 import { Conversations } from "./conversations";
 
-export default function Sidebar() {
+export default function Sidebar({ onlineUsers }) {
   const [searchResults, setSearchResults] = useState([]);
 
   console.log("Search Results --->", searchResults);
@@ -30,7 +30,7 @@ export default function Sidebar() {
       ) : (
         <>
           {/* Conversations */}
-          <Conversations />
+          <Conversations onlineUsers={onlineUsers} />
         </>
       )}
     </div>

@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import ChatMessages from "./messages/ChatMessages";
 import { getConversationMessages } from "../../features/chatSlice";
 import { ChatActions } from "./actions";
+import { checkOnlineStatus } from "../../utils/chat";
 
-export default function ChatContainer() {
+export default function ChatContainer({ onlineUsers }) {
   const dispatch = useDispatch();
   const { activeConversation, messages } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
@@ -28,7 +29,13 @@ export default function ChatContainer() {
       {/*Container*/}
       <div>
         {/* Chat Header */}
-        <ChatHeader />
+        <ChatHeader
+          online={
+            checkOnlineStatus(onlineUsers, user, activeConversation.users)
+              ? true
+              : false
+          }
+        />
         {/* Chat Messages */}
         <ChatMessages />
         {/* Chat Actions */}

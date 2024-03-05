@@ -1,19 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar } from "../components/sidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { getConversations } from "../features/chatSlice";
+import {
+  getConversations,
+  updateMessagesAndConversations,
+} from "../features/chatSlice";
 import { ChatContainer, WhatsappHome } from "../components/Chat";
+import SocketContext from "../context/socketContext";
 
-function Home() {
+function Home({ socket }) {
+  console.log("socket -->", socket);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { activeConversation } = useSelector((state) => state.chat);
-  console.log("Home --> active converstations --->", activeConversation);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
+  //join user into the socket io
+  useEffect(() => {
+    socket.emit("join", user._id);
+    //get online users
+    socket.on("get-online-users", (users) => {
+      console.log("online users --->", users);
+      setOnlineUsers(users);
+    });
+  }, [user]);
+
   useEffect(() => {
     if (user.token) {
       dispatch(getConversations(user.token));
     }
   }, [user]);
+
+  //listening to received messages
+  useEffect(() => {
+    socket.on("receive message", (message) => {
+      console.log("Recieve msg from other user -->", message);
+      dispatch(updateMessagesAndConversations(message));
+    });
+  }, []);
 
   return (
     <>
@@ -21,12 +45,21 @@ function Home() {
         {/*container*/}
         <div className="container h-screen flex py-[19px]">
           {/*Sidebar*/}
-          <Sidebar />
-          {activeConversation._id ? <ChatContainer /> : <WhatsappHome />}
+          <Sidebar onlineUsers={onlineUsers} />
+          {activeConversation._id ? (
+            <ChatContainer onlineUsers={onlineUsers} />
+          ) : (
+            <WhatsappHome />
+          )}
         </div>
       </div>
     </>
   );
 }
 
-export default Home;
+const HomeWithSocket = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => <Home {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
+export default HomeWithSocket;
